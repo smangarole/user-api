@@ -12,8 +12,8 @@ A small HTTP + WebSocket server. This document summarizes the available HTTP end
 - Run Locally
 - HTTP API
 - WebSocket Events
-- Testing Strategy
-- Notes & Limitations
+- Error Examples
+- Test Commands
 
 ---
 
@@ -125,7 +125,9 @@ npm start
 
 By default the server listens on port 3000 (use `PORT` env to change).
 
-## HTTP API (JSON)
+---
+
+## HTTP API
 
 Base path: `/api`
 
@@ -224,6 +226,8 @@ curl -s http://localhost:3000/api/orders
     }
 ```
 
+---
+
 ## WebSocket (events)
 
 The server runs a WebSocket server on the same port. Connect to:
@@ -256,10 +260,14 @@ All messages follow the shape:
 { "event": string, "data": any, "timestamp": string }
 ```
 
+---
+
 ## Notes
 
 - This server uses an in-memory store for users and orders; data is not persistent.
 - Validation errors and other failures return HTTP error responses with a consistent structure.
+
+---
 
 ## Error examples (cURL)
 
@@ -393,6 +401,8 @@ Expected response (404):
 ```json
 { "success": false, "error": { "message": "User with id 9999 not found." } }
 ```
+
+---
 
 ## Run tests:
 
