@@ -9,11 +9,11 @@ A small HTTP + WebSocket server. This document summarizes the available HTTP end
 - Features
 - Architecture
 - Project Structure
-- Run Locally
+- Requirements
+- Run Locally + Test Commands
 - HTTP API
 - WebSocket Events
 - Error Examples
-- Test Commands
 
 ---
 
@@ -109,7 +109,14 @@ Events are emitted asynchronously after successful REST operations.
 
 ---
 
-## Run locally
+## Requirements
+
+- Node.js >= 18
+- npm (comes with Node)
+
+---
+
+## Run locally + Test Commands
 
 1. Install dependencies (if any are listed in package.json):
 
@@ -117,12 +124,32 @@ Events are emitted asynchronously after successful REST operations.
 npm install
 ```
 
-2. Start the server:
+2. Run tests:
+### All Tests
+```bash
+npm run test:all
+```
+
+### Run Unit Tests
+```bash
+npm run test:unit
+```
+
+### Run API Tests
+```bash
+npm run test:api
+```
+
+### Run WebSocket Tests
+```bash
+npm run test:ws
+```
+
+3. Start the server (for manual testing):
 
 ```bash
 npm start
 ```
-
 By default the server listens on port 3000 (use `PORT` env to change).
 
 ---
@@ -403,25 +430,3 @@ Expected response (404):
 ```
 
 ---
-
-## Run tests:
-
-### Run Unit Tests
-```bash
-npm run test:unit
-```
-
-### Run API Tests
-```bash
-npm run test:api
-```
-
-### Run WebSocket Tests
-```bash
-npm run test:ws
-```
-
-### Run All Tests
-```bash
-npm run test:all
-```
