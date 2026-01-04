@@ -1,6 +1,6 @@
 const WebSocket = require("ws");
 const request = require("supertest");
-const { app, server } = require("../../server");
+const { server, initWebSocket } = require("../../server");
 
 // --- Helper: wait for a specific WS event ---
 function waitForEvent(ws, eventName, timeoutMs = 5000) {
@@ -53,14 +53,17 @@ describe("WebSocket events", () => {
   let ws;
 
   beforeAll(async () => {
+    initWebSocket();
     // Start server on ephemeral port
-    await new Promise((resolve) => server.listen(0, resolve));
+    await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
     const { port } = server.address();
     baseUrl = `http://127.0.0.1:${port}`;
   });
 
   afterAll(async () => {
-    if (ws && ws.readyState === WebSocket.OPEN) ws.close();
+    if (ws) {
+    try { ws.terminate(); } catch (_) {}
+    }
     await new Promise((resolve) => server.close(resolve));
   });
 

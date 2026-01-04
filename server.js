@@ -9,7 +9,26 @@ app.use(express.json());
 const server = http.createServer(app);
 
 // WebSocket server on the same HTTP server/port
-const wss = new WebSocketServer({ server });
+let wss = null;
+
+function initWebSocket() {
+  if (wss) return wss;
+
+  wss = new WebSocketServer({ server });
+
+  wss.on("connection", (ws) => {
+    ws.send(
+      JSON.stringify({
+        event: "CONNECTED",
+        data: { message: "WebSocket connected" },
+        timestamp: new Date().toISOString(),
+      })
+    );
+    ws.on("error", console.error);
+  });
+
+  return wss;
+}
 
 /**
  * Broadcast a JSON-wrapped event to all connected WebSocket clients.
@@ -17,18 +36,12 @@ const wss = new WebSocketServer({ server });
  * @param {any} data
  */
 function broadcast(event, data) {
+  if (!wss) return; // API tests don't initialize WS
   const message = JSON.stringify({ event, data, timestamp: new Date().toISOString() });
   wss.clients.forEach((client) => {
     if (client.readyState === 1) client.send(message);
   });
 }
-
-wss.on("connection", (ws) => {
-  ws.send(
-    JSON.stringify({ event: "CONNECTED", data: { message: "WebSocket connected" }, timestamp: new Date().toISOString() })
-  );
-  ws.on("error", console.error);
-});
 
 // ---- In-memory stores (simple, non-persistent) ----
 const usersStore = {
@@ -111,7 +124,8 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 3000;
 
 if (require.main === module) {
+  initWebSocket();
   server.listen(PORT, () => console.log(`HTTP + WS running on http://localhost:${PORT}`));
 }
 
-module.exports = { app, server, __resetData, broadcast };
+module.exports = { app, server, __resetData, broadcast, initWebSocket };
