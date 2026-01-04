@@ -117,15 +117,13 @@ Events are emitted asynchronously after successful REST operations.
 ---
 
 ## Run locally + Test Commands
-
-1. Install dependencies (if any are listed in package.json):
+### Install dependencies (if any are listed in package.json):
 
 ```bash
 npm install
 ```
 
-2. Run tests:
-### All Tests
+### Run All Tests
 ```bash
 npm run test:all
 ```
@@ -145,8 +143,7 @@ npm run test:api
 npm run test:ws
 ```
 
-3. Start the server (for manual testing):
-
+### Start the server (for manual testing):
 ```bash
 npm start
 ```
